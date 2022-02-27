@@ -2,14 +2,25 @@ function spinnerCase(system){
     document.getElementById('spinner').style.display=system;
 }
 
+const resultDiv = document.getElementById('result');
+
 function searchClick(){
     spinnerCase('block');
+    // document.getElementById('input-field').value = '';
+    resultDiv.textContent = ``;
+
     const searchInput = document.getElementById('input-field').value;
-    const url = `https://www.thesportsdb.com/api/v1/json/2/searchplayers.php?p=${searchInput}`;
-    fetch(url)
-    .then(response => response.json())
-    .then(data => showPlayer(data.player));
+    urlGenerate(searchInput);
+
+    document.getElementById('input-field').value = '';
 };
+function urlGenerate(searchInput){
+     const url = `https://www.thesportsdb.com/api/v1/json/2/searchplayers.php?p=${searchInput}`;
+
+     fetch(url)
+         .then(response => response.json())
+         .then(data => showPlayer(data.player));
+ }
 
 const showPlayer = (players) =>{
     // console.log(players);
@@ -17,13 +28,15 @@ const showPlayer = (players) =>{
     for(const player of players){
         console.log(player);
 
+        resultDiv.textContent = '';
+
         const cardDiv = document.createElement('div');
         cardDiv.classList.add('card');
         cardDiv.classList.add('col-lg-3');
         cardDiv.classList.add('col-md-4');
         cardDiv.classList.add('col-sm-6');
         cardDiv.innerHTML = `
-            <img src="${player.strThumb}" class="card-img-top" alt="...">
+            <img src="${player.strThumb}" class="card-img-top" alt="Image not found">
             <div class="card-body">
                 <h5 class="card-title">${player.strPlayer}</h5>
                 <p class="card-text">
